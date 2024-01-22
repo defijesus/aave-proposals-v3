@@ -20,7 +20,7 @@ import {IPriceChecker} from 'aave-helpers/swaps/interfaces/IExpectedOutCalculato
  * @title AavePermissionedSwapper
  * @author TokenLogic
  * @notice before using this swapper, collector (via governance) should give this contract
- * a timed max allowance of INPUT using Permit2
+ * a max allowance of INPUT
  */
 contract AavePermissionedSwapper is OwnableWithGuardian, Rescuable {
   using SafeERC20 for IERC20;
