@@ -19,8 +19,15 @@ import {IPriceChecker} from 'aave-helpers/swaps/interfaces/IExpectedOutCalculato
 /**
  * @title AavePermissionedSwapper
  * @author TokenLogic
- * @notice before using this swapper, collector (via governance) should give this contract
- * a max allowance of INPUT
+ * @notice A Permissioned AaveSwapper with (1) a single immutable input;
+ * (2) outputs whitelisted by a Aave DAO
+ * (3) tokens can only be transfered out to Collector
+ * (4) only the Guardian can request new swaps
+ * This allows Aave DAO to give the responsibility to a Guardian to trade a single
+ * asset over time for another Aave DAO whitelisted assets without the possibility
+ * of Guardian stealing the funds.
+ * Before using this swapper, collector (via governance) should give this contract
+ * a max allowance of INPUT & whitelist the wanted outputs.
  */
 contract AavePermissionedSwapper is OwnableWithGuardian, Rescuable {
   using SafeERC20 for IERC20;
