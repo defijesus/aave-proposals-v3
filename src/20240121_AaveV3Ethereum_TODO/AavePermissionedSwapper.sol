@@ -27,7 +27,7 @@ import {IPriceChecker} from 'aave-helpers/swaps/interfaces/IExpectedOutCalculato
  * asset over time for another Aave DAO whitelisted assets without the possibility
  * of Guardian stealing the funds.
  * Before using this swapper, collector (via governance) should give this contract
- * a max allowance of INPUT & whitelist the wanted outputs.
+ * an allowance of INPUT & whitelist the wanted outputs & their respective max slippage
  */
 contract AavePermissionedSwapper is OwnableWithGuardian, Rescuable {
   using SafeERC20 for IERC20;
@@ -46,12 +46,17 @@ contract AavePermissionedSwapper is OwnableWithGuardian, Rescuable {
 
   error InvalidOutput();
   error InvalidAmount();
+  error InvalidSlippage();
+  error InvalidInputLength();
   error OracleNotSet();
+
+  address public constant COLLECTOR = address(AaveV3Ethereum.COLLECTOR);
 
   address public immutable INPUT;
   address public immutable INPUT_ORACLE;
 
   mapping(address => bool) public outputEnabled;
+  mapping(address => uint256) public outputMaxSplippage;
 
   constructor(address guardian, address input, address inputOracle) {
     INPUT = input;
@@ -61,17 +66,29 @@ contract AavePermissionedSwapper is OwnableWithGuardian, Rescuable {
   }
 
   function pullFromCollector(uint256 amount) external onlyGuardian {
-    AaveV3Ethereum.COLLECTOR.transfer(INPUT, address(this), amount);
+    IERC20(INPUT).safeTransferFrom(COLLECTOR, address(this), amount);
   }
 
   function releaseToCollector(IERC20 asset) external onlyGuardian {
-    asset.safeTransfer(address(AaveV3Ethereum.COLLECTOR), asset.balanceOf(address(this)));
+    asset.safeTransfer(COLLECTOR, asset.balanceOf(address(this)));
   }
 
   function setOutputEnabled(address[] calldata output, bool[] calldata enabled) external onlyOwner {
-    require(output.length == enabled.length);
-    for (uint256 i = 0; i < output.length; i++) {
+    uint256 outputLength = output.length;
+    if (outputLength != enabled.length) revert InvalidInputLength();
+    for (uint256 i = 0; i < outputLength; i++) {
       outputEnabled[output[i]] = enabled[i];
+    }
+  }
+
+  function setOutputMaxSlippage(
+    address[] calldata output,
+    uint256[] calldata slippage
+  ) external onlyOwner {
+    uint256 outputLength = output.length;
+    if (outputLength != slippage.length) revert InvalidInputLength();
+    for (uint256 i = 0; i < outputLength; i++) {
+      outputMaxSplippage[output[i]] = slippage[i];
     }
   }
 
@@ -83,12 +100,13 @@ contract AavePermissionedSwapper is OwnableWithGuardian, Rescuable {
     uint256 amount,
     uint256 slippage
   ) external onlyGuardian {
+    if (slippage > outputMaxSplippage[toToken]) revert InvalidSlippage();
     if (!outputEnabled[toToken]) revert InvalidOutput();
     if (amount == 0) revert InvalidAmount();
 
     address fromToken = INPUT;
     address fromOracle = INPUT_ORACLE;
-    address recipient = address(this);
+    address recipient = COLLECTOR;
 
     IERC20(fromToken).forceApprove(milkman, amount);
 
@@ -125,7 +143,7 @@ contract AavePermissionedSwapper is OwnableWithGuardian, Rescuable {
   ) external onlyOwnerOrGuardian {
     address fromToken = INPUT;
     address fromOracle = INPUT_ORACLE;
-    address recipient = address(this);
+    address recipient = COLLECTOR;
 
     bytes memory data = _getPriceCheckerAndData(fromOracle, toOracle, slippage);
 
