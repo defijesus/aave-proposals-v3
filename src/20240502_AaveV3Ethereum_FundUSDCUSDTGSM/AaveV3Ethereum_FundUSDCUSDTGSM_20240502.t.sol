@@ -24,23 +24,28 @@ contract AaveV3Ethereum_FundUSDCUSDTGSM_20240502_Test is ProtocolV3TestBase {
    * @dev executes the generic test suite including e2e and config snapshots
    */
   function test_defaultProposalExecution() public {
-    uint256 usdcBalanceBefore = IERC20(AaveV3EthereumAssets.USDC_UNDERLYING).balanceOf(
-      proposal.USDC_GSM()
+    uint256 usdcAllowanceBefore = IERC20(AaveV3EthereumAssets.USDC_UNDERLYING).allowance(
+      address(AaveV3Ethereum.COLLECTOR),
+      proposal.ACL_SAFE()
     );
-    uint256 usdtBalanceBefore = IERC20(AaveV3EthereumAssets.USDT_UNDERLYING).balanceOf(
-      proposal.USDT_GSM()
+    uint256 usdtAllowanceBefore = IERC20(AaveV3EthereumAssets.USDT_UNDERLYING).allowance(
+      address(AaveV3Ethereum.COLLECTOR),
+      proposal.ACL_SAFE()
     );
 
     executePayload(vm, address(proposal));
 
-    uint256 usdcBalanceAfter = IERC20(AaveV3EthereumAssets.USDC_UNDERLYING).balanceOf(
-      proposal.USDC_GSM()
-    );
-    uint256 usdtBalanceAfter = IERC20(AaveV3EthereumAssets.USDT_UNDERLYING).balanceOf(
-      proposal.USDT_GSM()
+    uint256 usdcAllowanceAfter = IERC20(AaveV3EthereumAssets.USDC_UNDERLYING).allowance(
+      address(AaveV3Ethereum.COLLECTOR),
+      proposal.ACL_SAFE()
     );
 
-    assertApproxEqAbs(usdcBalanceBefore + proposal.AMOUNT(), usdcBalanceAfter, 1);
-    assertApproxEqAbs(usdtBalanceBefore + proposal.AMOUNT(), usdtBalanceAfter, 1);
+    uint256 usdtAllowanceAfter = IERC20(AaveV3EthereumAssets.USDT_UNDERLYING).allowance(
+      address(AaveV3Ethereum.COLLECTOR),
+      proposal.ACL_SAFE()
+    );
+
+    assertEq(usdcAllowanceBefore + proposal.AMOUNT(), usdcAllowanceAfter);
+    assertEq(usdtAllowanceBefore + proposal.AMOUNT(), usdtAllowanceAfter);
   }
 }

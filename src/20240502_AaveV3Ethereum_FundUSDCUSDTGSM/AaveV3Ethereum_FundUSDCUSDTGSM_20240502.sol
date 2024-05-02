@@ -12,14 +12,10 @@ import {AaveV3Ethereum, AaveV3EthereumAssets} from 'aave-address-book/AaveV3Ethe
  */
 contract AaveV3Ethereum_FundUSDCUSDTGSM_20240502 is IProposalGenericExecutor {
   uint256 public constant AMOUNT = 1_000_000e6;
-  address public constant USDC_GSM = 0x0d8eFfC11dF3F229AA1EA0509BC9DFa632A13578;
-  address public constant USDT_GSM = 0x686F8D21520f4ecEc7ba577be08354F4d1EB8262;
+  address public constant ACL_SAFE = 0x205e795336610f5131Be52F09218AF19f0f3eC60;
 
   function execute() external {
-    AaveV3Ethereum.COLLECTOR.transfer(AaveV3EthereumAssets.USDC_A_TOKEN, address(this), AMOUNT);
-    AaveV3Ethereum.COLLECTOR.transfer(AaveV3EthereumAssets.USDT_A_TOKEN, address(this), AMOUNT);
-
-    AaveV3Ethereum.POOL.withdraw(AaveV3EthereumAssets.USDC_UNDERLYING, type(uint256).max, USDC_GSM);
-    AaveV3Ethereum.POOL.withdraw(AaveV3EthereumAssets.USDT_UNDERLYING, type(uint256).max, USDT_GSM);
+    AaveV3Ethereum.COLLECTOR.approve(AaveV3EthereumAssets.USDC_UNDERLYING, ACL_SAFE, AMOUNT);
+    AaveV3Ethereum.COLLECTOR.approve(AaveV3EthereumAssets.USDT_UNDERLYING, ACL_SAFE, AMOUNT);
   }
 }

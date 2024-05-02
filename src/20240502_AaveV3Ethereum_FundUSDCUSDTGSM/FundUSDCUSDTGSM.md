@@ -30,7 +30,11 @@ With the introduction of the Merit rewards expected to be included in the Aave P
 
 ## Specification
 
-The following assets are to be withdrawn from Aave Eth v3 and transferred to the respective GSM.
+Two Allowances are to be created enabling the Aave Liquidity Committee (ALC) to draw 1M USDC and 1M USDT from Aave v3.
+
+When market conditions are optimal, the ALC will fund the USDC and USDT GSMs.
+
+ALC SAFE: `0x205e795336610f5131Be52F09218AF19f0f3eC60`
 
 | Asset | Asset |                 GSM Address                  |
 | :---: | :---: | :------------------------------------------: |
@@ -38,6 +42,8 @@ The following assets are to be withdrawn from Aave Eth v3 and transferred to the
 | USDC  |  1M   | `0x0d8eFfC11dF3F229AA1EA0509BC9DFa632A13578` |
 
 This proposal will be implemented via the Direct-to-AIP process.
+
+Future GSM related proposals, such as this one, are to be implemented via the Direct-to-AIP process.
 
 ## References
 
