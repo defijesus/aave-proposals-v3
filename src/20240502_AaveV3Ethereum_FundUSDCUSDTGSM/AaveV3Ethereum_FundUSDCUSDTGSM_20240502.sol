@@ -7,8 +7,8 @@ import {AaveV3Ethereum, AaveV3EthereumAssets} from 'aave-address-book/AaveV3Ethe
 /**
  * @title Fund USDC & USDT GSM
  * @author karpatkey_TokenLogic
- * - Snapshot: No snapshot for Direct-to-AIP
- * - Discussion: TODO
+ * - Snapshot: TODO
+ * - Discussion: https://governance.aave.com/t/arfc-fund-usdc-usdt-gsm/17566
  */
 contract AaveV3Ethereum_FundUSDCUSDTGSM_20240502 is IProposalGenericExecutor {
   uint256 public constant AMOUNT = 1_000_000e6;

@@ -1,8 +1,8 @@
 ---
 title: "Fund USDC & USDT GSM"
 author: "karpatkey_TokenLogic"
-discussions: "TODO"
-snapshot: "No snapshot for Direct-to-AIP"
+discussions: "https://governance.aave.com/t/arfc-fund-usdc-usdt-gsm/17566"
+snapshot: "TODO"
 ---
 
 ## Simple Summary
@@ -49,8 +49,8 @@ Future GSM related proposals, such as this one, are to be implemented via the Di
 
 - Implementation: [AaveV3Ethereum](https://github.com/bgd-labs/aave-proposals-v3/blob/main/src/20240502_AaveV3Ethereum_FundUSDCUSDTGSM/AaveV3Ethereum_FundUSDCUSDTGSM_20240502.sol)
 - Tests: [AaveV3Ethereum](https://github.com/bgd-labs/aave-proposals-v3/blob/main/src/20240502_AaveV3Ethereum_FundUSDCUSDTGSM/AaveV3Ethereum_FundUSDCUSDTGSM_20240502.t.sol)
-- Snapshot: No snapshot for Direct-to-AIP
-- [Discussion](TODO)
+- [Snapshot](TODO)
+- [Discussion](https://governance.aave.com/t/arfc-fund-usdc-usdt-gsm/17566)
 
 # Disclosure
 

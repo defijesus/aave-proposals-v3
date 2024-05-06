@@ -6,8 +6,8 @@ export const config: ConfigFile = {
     shortName: 'FundUSDCUSDTGSM',
     date: '20240502',
     author: 'karpatkey_TokenLogic',
-    discussion: 'TODO',
-    snapshot: 'No snapshot for Direct-to-AIP',
+    discussion: 'https://governance.aave.com/t/arfc-fund-usdc-usdt-gsm/17566',
+    snapshot: 'TODO',
   },
   poolOptions: {AaveV3Ethereum: {configs: {OTHERS: {}}, cache: {blockNumber: 19783634}}},
 };
